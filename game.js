@@ -596,8 +596,12 @@ function gameOver(reason) {
 function showGameOverScreen(reason) {
   const starved  = surplusDays() < -1;
   const titleEl  = document.getElementById('go-title');
-  titleEl.textContent  = starved ? '☠ Community Starved!' : '🎯 Hunt Over';
-  titleEl.style.color  = starved ? '#cc2222' : '#d4a017';
+  const logoEl   = document.getElementById('go-logo');
+
+  titleEl.textContent = starved ? '☠ Community Starved!' : 'Hunt Over';
+  titleEl.style.color = starved ? '#cc2222' : '#d4a017';
+  // Show logo only on a normal game-over; hide it when community starved
+  logoEl.classList.toggle('hidden', starved);
 
   const { lived, dead } = calcSurvivors();
 
