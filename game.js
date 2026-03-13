@@ -599,11 +599,14 @@ function showGameOverScreen(reason) {
   titleEl.textContent  = starved ? '☠ Community Starved!' : '🎯 Hunt Over';
   titleEl.style.color  = starved ? '#cc2222' : '#d4a017';
 
+  const { lived, dead } = calcSurvivors();
+
   document.getElementById('go-reason').textContent    = reason || '';
   document.getElementById('go-score').textContent     = G.score.toLocaleString();
   document.getElementById('go-days').textContent      = G.day;
   document.getElementById('go-cal').textContent       = G.totalCal.toLocaleString();
-  document.getElementById('go-size').textContent      = G.communitySize;
+  document.getElementById('go-lived').textContent     = lived;
+  document.getElementById('go-dead').textContent      = dead;
 
   const badgeWrap = document.getElementById('go-badges');
   badgeWrap.innerHTML = ANIMAL_KEYS
@@ -615,11 +618,24 @@ function showGameOverScreen(reason) {
 }
 
 // ============================================================
+// SURVIVOR CALCULATION
+// ============================================================
+
+function calcSurvivors() {
+  // Each person needs 1,500 cal × number of days played
+  const calPerPerson = G.day * 1500;
+  const deficit      = Math.max(0, totalNeeded() - G.totalCal);
+  const dead         = Math.min(G.communitySize, Math.floor(deficit / calPerPerson));
+  return { lived: G.communitySize - dead, dead };
+}
+
+// ============================================================
 // HIGH SCORES  (localStorage)
 // ============================================================
 
 function saveScore() {
   try {
+    const { lived, dead } = calcSurvivors();
     const key    = 'wackemsnap_v1_scores';
     const scores = JSON.parse(localStorage.getItem(key) || '[]');
     scores.push({
@@ -627,6 +643,8 @@ function saveScore() {
       days:  G.day,
       cal:   G.totalCal,
       size:  G.communitySize,
+      lived,
+      dead,
       date:  new Date().toLocaleDateString(),
     });
     scores.sort((a, b) => b.score - a.score);
@@ -648,13 +666,16 @@ function renderScores() {
     el.innerHTML = '<div class="score-empty">No hunts recorded yet</div>';
     return;
   }
-  el.innerHTML = scores.slice(0, 5).map((s, i) =>
-    `<div class="score-row">
+  el.innerHTML = scores.slice(0, 5).map((s, i) => {
+    const livedStr = s.lived !== undefined
+      ? `✅${s.lived} ☠${s.dead}`
+      : `👥${s.size}`;
+    return `<div class="score-row">
       <span>${i + 1}. ${s.score.toLocaleString()}</span>
+      <span>${livedStr}</span>
       <span>Day ${s.days}</span>
-      <span>${s.date}</span>
-    </div>`
-  ).join('');
+    </div>`;
+  }).join('');
 }
 
 // ============================================================
@@ -682,9 +703,8 @@ function setupTouch() {
       // Tap = rotate
       tryRotate();
     } else if (Math.abs(dx) > Math.abs(dy)) {
-      // Horizontal swipe
-      const steps = Math.max(1, Math.round(Math.abs(dx) / CS));
-      for (let i = 0; i < steps; i++) tryMove(dx > 0 ? 1 : -1, 0);
+      // Horizontal swipe – one square per gesture
+      tryMove(dx > 0 ? 1 : -1, 0);
     } else {
       // Vertical swipe
       if (dy > 0) {
