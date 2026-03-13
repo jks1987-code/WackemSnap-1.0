@@ -86,7 +86,7 @@ body {
 /* ============================================================
    MENU SCREEN
    ============================================================ */
-#menu-screen {
+#screen-menu {
   align-items: center;
   justify-content: flex-start;
   padding: 24px 20px 16px;
@@ -237,12 +237,12 @@ body {
 /* ============================================================
    HOW TO PLAY SCREEN
    ============================================================ */
-#howto-screen {
+#screen-howto {
   padding: 20px;
   gap: 14px;
   background: var(--bg-dark);
 }
-#howto-screen h2 {
+#screen-howto h2 {
   text-align: center;
   color: var(--accent-gold);
   font-size: 1.3rem;
@@ -317,7 +317,7 @@ body {
 /* ============================================================
    GAME SCREEN
    ============================================================ */
-#game-screen {
+#screen-game {
   background: var(--bg-deep);
   overflow: hidden;
 }
@@ -484,7 +484,7 @@ body {
 /* ============================================================
    GAME OVER SCREEN
    ============================================================ */
-#gameover-screen {
+#screen-gameover {
   justify-content: center;
   align-items: center;
   padding: 24px 20px;
@@ -586,13 +586,13 @@ body {
    ============================================================ */
 @supports (padding: env(safe-area-inset-top)) {
   /* Push menu / how-to / gameover content below the camera pill */
-  #menu-screen {
+  #screen-menu {
     padding-top: max(24px, env(safe-area-inset-top));
   }
-  #howto-screen {
+  #screen-howto {
     padding-top: max(20px, env(safe-area-inset-top));
   }
-  #gameover-screen {
+  #screen-gameover {
     padding-top: max(24px, env(safe-area-inset-top));
   }
   /* Game HUD sits right at the top – give it breathing room */

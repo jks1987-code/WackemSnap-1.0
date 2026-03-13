@@ -19,6 +19,24 @@ const CAL_PER_PERSON_PER_DAY = 1500;  // minimum daily calories per community me
 
 // ---- Animal definitions ----
 const ANIMALS = {
+  ELK: {
+    id:    'ELK',
+    name:  'Bull Elk',
+    emoji: '🫎',
+    calPerBlock: 500,   // 4 blocks = 2000 cal per piece – highest
+    color: '#8a5c18',
+    hiColor: '#c09040',
+    loColor: '#5a3a0a',
+  },
+  BEAR: {
+    id:    'BEAR',
+    name:  'Black Bear',
+    emoji: '🐻',
+    calPerBlock: 300,   // 4 blocks = 1200 cal per piece
+    color: '#4a2a0e',
+    hiColor: '#7a4e22',
+    loColor: '#2a1406',
+  },
   BUCK: {
     id:    'BUCK',
     name:  'White Tail Buck',
@@ -57,22 +75,34 @@ const ANIMALS = {
   },
 };
 
-const ANIMAL_KEYS = ['BUCK', 'TURKEY', 'RABBIT', 'GROUSE'];
+// Highest calorie first; grouse most common, elk rarest
+const ANIMAL_KEYS = ['ELK', 'BEAR', 'BUCK', 'TURKEY', 'RABBIT', 'GROUSE'];
 
-// Spawn weights – grouse most common, buck rarest
-const WEIGHTS = [1, 2, 4, 5]; // BUCK, TURKEY, RABBIT, GROUSE
+// Spawn weights – grouse most common, elk & bear rarest
+const WEIGHTS = [1, 1, 2, 4, 6, 8]; // ELK, BEAR, BUCK, TURKEY, RABBIT, GROUSE
 
 // ---- Tetromino shapes  [rotation][row][col] ----
+//  ELK    → L-piece (mirror of J – big, graceful)
+//  BEAR   → O-piece (solid 2×2 square)
 //  BUCK   → J-piece
 //  TURKEY → T-piece
 //  RABBIT → S-piece
 //  GROUSE → I-piece
 const SHAPES = {
-  BUCK: [
+  ELK: [
     [[1,0,0],[1,1,1]],
     [[1,1],[1,0],[1,0]],
     [[1,1,1],[0,0,1]],
     [[0,1],[0,1],[1,1]],
+  ],
+  BEAR: [
+    [[1,1],[1,1]],
+  ],
+  BUCK: [
+    [[0,0,1],[1,1,1]],
+    [[1,0],[1,0],[1,1]],
+    [[1,1,1],[1,0,0]],
+    [[1,1],[0,1],[0,1]],
   ],
   TURKEY: [
     [[0,1,0],[1,1,1]],
@@ -118,7 +148,7 @@ function resetState() {
     lastDrop:     0,
     interval:     BASE_INTERVAL,
     communitySize,
-    harvestCounts: { BUCK: 0, TURKEY: 0, RABBIT: 0, GROUSE: 0 },
+    harvestCounts: { ELK: 0, BEAR: 0, BUCK: 0, TURKEY: 0, RABBIT: 0, GROUSE: 0 },
     flashRows:    [],          // rows currently flashing before removal
     flashUntil:   0,
     pendingLines: 0,
