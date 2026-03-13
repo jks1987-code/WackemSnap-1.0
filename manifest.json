@@ -10,13 +10,13 @@
   "categories": ["games", "entertainment"],
   "icons": [
     {
-      "src": "WackemLogo%20.png",
+      "src": "WackemLogo.png",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "WackemLogo%20.png",
+      "src": "WackemLogo.png",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "maskable"
