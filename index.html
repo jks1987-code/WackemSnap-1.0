@@ -195,7 +195,7 @@
     <!-- On-screen controls -->
     <div class="game-controls">
       <button class="ctrl-btn"
-              ontouchstart="this.classList.add('pressed');startRepeat('left')"
+              ontouchstart="event.preventDefault();this.classList.add('pressed');startRepeat('left')"
               ontouchend="stopRepeat()"
               ontouchcancel="stopRepeat()"
               onmousedown="this.classList.add('pressed');startRepeat('left')"
@@ -208,7 +208,7 @@
               aria-label="Rotate">&#8635;</button>
 
       <button class="ctrl-btn"
-              ontouchstart="this.classList.add('pressed');startRepeat('down')"
+              ontouchstart="event.preventDefault();this.classList.add('pressed');startRepeat('down')"
               ontouchend="stopRepeat()"
               ontouchcancel="stopRepeat()"
               onmousedown="this.classList.add('pressed');startRepeat('down')"
@@ -217,7 +217,7 @@
               aria-label="Soft drop">&#9660;</button>
 
       <button class="ctrl-btn"
-              ontouchstart="this.classList.add('pressed');startRepeat('right')"
+              ontouchstart="event.preventDefault();this.classList.add('pressed');startRepeat('right')"
               ontouchend="stopRepeat()"
               ontouchcancel="stopRepeat()"
               onmousedown="this.classList.add('pressed');startRepeat('right')"
