@@ -6,7 +6,7 @@ const ASSETS = [
   './style.css',
   './game.js',
   './manifest.json',
-  './WackemLogo%20.png'
+  './WackemLogo.png'
 ];
 
 self.addEventListener('install', event => {
