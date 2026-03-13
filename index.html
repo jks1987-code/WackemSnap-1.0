@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#1a2f1a">
+  <meta name="description" content="Stack animals, earn calories, and feed your community – WackemSnap!">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="WackemSnap">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="WackemLogo%20.png">
+  <link rel="stylesheet" href="style.css">
+  <title>WackemSnap</title>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ========================================================
+       MENU SCREEN
+       ======================================================== -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-logo-wrap">
+      <img src="WackemLogo%20.png" alt="WackemSnap">
+    </div>
+    <h1 class="game-title">WackemSnap</h1>
+    <p class="game-subtitle">Hunt &bull; Stack &bull; Feed Your Community</p>
+
+    <div class="community-setup">
+      <label>Community Size</label>
+      <div class="number-control">
+        <button onclick="adjustCommunity(-1)" aria-label="Decrease">&#8722;</button>
+        <span id="comm-display">10</span>
+        <button onclick="adjustCommunity(1)"  aria-label="Increase">&#43;</button>
+      </div>
+      <div style="font-size:0.7rem;color:var(--text-muted);margin-top:2px;">
+        Need: <span id="cal-preview">15,000</span> cal/day
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startGame()">&#x1F3AF; Start Hunt</button>
+    <button class="btn-secondary" onclick="showHowTo()">How to Play</button>
+
+    <div class="high-scores-panel">
+      <h3>&#x1F3C6; Best Hunts</h3>
+      <div id="score-list"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       HOW TO PLAY SCREEN
+       ======================================================== -->
+  <div id="screen-howto" class="screen">
+    <h2>How to Play</h2>
+    <div class="howto-body">
+
+      <div class="info-card">
+        <h3>&#x1F98C; Animals &amp; Calories</h3>
+        <div class="animal-row">
+          <span class="a-emoji">&#x1F98C;</span>
+          <div class="a-info">
+            <div class="a-name">White Tail Buck</div>
+            <div class="a-cal">800 calories per piece</div>
+          </div>
+          <span class="a-shape">J-piece</span>
+        </div>
+        <div class="animal-row">
+          <span class="a-emoji">&#x1F983;</span>
+          <div class="a-info">
+            <div class="a-name">Wild Turkey</div>
+            <div class="a-cal">400 calories per piece</div>
+          </div>
+          <span class="a-shape">T-piece</span>
+        </div>
+        <div class="animal-row">
+          <span class="a-emoji">&#x1F407;</span>
+          <div class="a-info">
+            <div class="a-name">Rabbit</div>
+            <div class="a-cal">160 calories per piece</div>
+          </div>
+          <span class="a-shape">S-piece</span>
+        </div>
+        <div class="animal-row">
+          <span class="a-emoji">&#x1F426;</span>
+          <div class="a-info">
+            <div class="a-name">Grouse</div>
+            <div class="a-cal">80 calories per piece</div>
+          </div>
+          <span class="a-shape">I-piece</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>&#x1F4F1; Controls</h3>
+        <div class="ctrl-row"><span class="ctrl-key">Tap</span> canvas to rotate piece</div>
+        <div class="ctrl-row"><span class="ctrl-key">Swipe Left / Right</span> move piece</div>
+        <div class="ctrl-row"><span class="ctrl-key">Swipe Down fast</span> hard drop</div>
+        <div class="ctrl-row"><span class="ctrl-key">&#9664; &#9654;</span> move buttons</div>
+        <div class="ctrl-row"><span class="ctrl-key">&#8635;</span> rotate button</div>
+        <div class="ctrl-row"><span class="ctrl-key">&#9660;</span> soft drop</div>
+        <div class="ctrl-row"><span class="ctrl-key">&#11015;</span> hard drop (instant)</div>
+        <div class="ctrl-row"><span class="ctrl-key">&#9646;&#9646;</span> pause / resume</div>
+        <div class="ctrl-row"><span class="ctrl-key">Arrow keys / Space</span> keyboard</div>
+      </div>
+
+      <div class="info-card">
+        <h3>&#x1F35E; Community &amp; Starvation</h3>
+        <p class="goal-text">
+          Every <strong>10 lines cleared</strong> = 1 game day passes.<br><br>
+          Your community needs <strong>1,500 cal per person per day</strong>
+          to survive. Calories are earned when full rows are cleared.<br><br>
+          A calorie bar shows your surplus or deficit. Fall more than
+          <strong>2 days behind</strong> and your community starts starving.
+          Keep pace or the hunt fails!<br><br>
+          Bigger animals spawn rarely – prioritise clearing rows over
+          chasing a specific piece.
+        </p>
+      </div>
+
+    </div>
+    <button class="btn-primary" onclick="backToMenu()">&#x2190; Back</button>
+  </div>
+
+  <!-- ========================================================
+       GAME SCREEN
+       ======================================================== -->
+  <div id="screen-game" class="screen">
+
+    <!-- HUD -->
+    <div class="game-hud">
+      <div class="hud-col">
+        <span class="hud-label">Score</span>
+        <span class="hud-value" id="hud-score">0</span>
+        <span class="hud-label" style="margin-top:4px;">Level</span>
+        <span class="hud-value" id="hud-level">1</span>
+      </div>
+
+      <div class="hud-col center">
+        <div class="cal-widget">
+          <div class="cal-bar-track">
+            <div class="cal-bar-fill" id="cal-bar-fill"></div>
+          </div>
+          <div class="cal-numbers">
+            <span id="cal-earned">0</span>
+            <span class="cal-sep">/</span>
+            <span id="cal-needed">0</span>
+            <span class="cal-unit">cal</span>
+          </div>
+          <div class="cal-day">Day <span id="hud-day">1</span></div>
+        </div>
+      </div>
+
+      <div class="hud-col" style="align-items:flex-end;">
+        <span class="hud-label" style="text-align:right;">Next</span>
+        <canvas id="next-canvas" width="64" height="64"></canvas>
+      </div>
+    </div>
+
+    <!-- Starvation warning banner -->
+    <div class="warn-banner hidden" id="warn-banner">
+      <span id="warn-text"></span>
+    </div>
+
+    <!-- Game canvas area -->
+    <div class="canvas-wrap">
+      <canvas id="game-canvas"></canvas>
+
+      <!-- Pause overlay -->
+      <div id="pause-overlay" class="pause-overlay hidden">
+        <div class="pause-box">
+          <h2>&#9646;&#9646; Paused</h2>
+          <button class="btn-primary" style="max-width:200px;" onclick="resumeGame()">&#9654; Resume</button>
+          <button class="btn-secondary" style="max-width:200px;" onclick="goToMenu()">&#x2190; Quit Hunt</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- On-screen controls -->
+    <div class="game-controls">
+      <button class="ctrl-btn"
+              ontouchstart="this.classList.add('pressed');startRepeat('left')"
+              ontouchend="stopRepeat()"
+              ontouchcancel="stopRepeat()"
+              onmousedown="this.classList.add('pressed');startRepeat('left')"
+              onmouseup="stopRepeat()"
+              onmouseleave="stopRepeat()"
+              aria-label="Move left">&#9664;</button>
+
+      <button class="ctrl-btn"
+              onclick="doAction('rotate')"
+              aria-label="Rotate">&#8635;</button>
+
+      <button class="ctrl-btn"
+              ontouchstart="this.classList.add('pressed');startRepeat('down')"
+              ontouchend="stopRepeat()"
+              ontouchcancel="stopRepeat()"
+              onmousedown="this.classList.add('pressed');startRepeat('down')"
+              onmouseup="stopRepeat()"
+              onmouseleave="stopRepeat()"
+              aria-label="Soft drop">&#9660;</button>
+
+      <button class="ctrl-btn"
+              ontouchstart="this.classList.add('pressed');startRepeat('right')"
+              ontouchend="stopRepeat()"
+              ontouchcancel="stopRepeat()"
+              onmousedown="this.classList.add('pressed');startRepeat('right')"
+              onmouseup="stopRepeat()"
+              onmouseleave="stopRepeat()"
+              aria-label="Move right">&#9654;</button>
+
+      <button class="ctrl-btn pause-btn"
+              onclick="togglePause()"
+              aria-label="Pause">&#9646;&#9646;</button>
+
+      <button class="ctrl-btn drop-btn"
+              onclick="doAction('harddrop')"
+              aria-label="Hard drop">&#11015;</button>
+    </div>
+
+  </div><!-- end #screen-game -->
+
+  <!-- ========================================================
+       GAME OVER SCREEN
+       ======================================================== -->
+  <div id="screen-gameover" class="screen">
+    <div class="gameover-box">
+      <h2 class="gameover-title" id="go-title">Hunt Over</h2>
+      <p class="gameover-reason" id="go-reason"></p>
+
+      <div class="stats-panel">
+        <div class="stat-row">
+          <span class="stat-label">Score</span>
+          <span class="stat-val" id="go-score">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Days Survived</span>
+          <span class="stat-val" id="go-days">1</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Calories Earned</span>
+          <span class="stat-val" id="go-cal">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Community Size</span>
+          <span class="stat-val" id="go-size">10</span>
+        </div>
+        <div class="stat-row" style="align-items:flex-start;flex-wrap:wrap;gap:6px;">
+          <span class="stat-label">Animals Harvested</span>
+          <div class="harvest-badges" id="go-badges"></div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="startGame()">&#x1F3AF; Hunt Again</button>
+      <button class="btn-secondary" onclick="goToMenu()">&#x2190; Main Menu</button>
+    </div>
+  </div>
+
+</div><!-- end #app -->
+
+<script src="game.js"></script>
+</body>
+</html>

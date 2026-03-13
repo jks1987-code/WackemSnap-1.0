@@ -1,0 +1,25 @@
+{
+  "name": "WackemSnap",
+  "short_name": "WackemSnap",
+  "description": "Animal-themed hunting Tetris – stack animals, earn calories, feed your community!",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a1a0a",
+  "theme_color": "#1a2f1a",
+  "orientation": "portrait-primary",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "WackemLogo%20.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "WackemLogo%20.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
