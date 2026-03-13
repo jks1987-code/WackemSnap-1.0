@@ -489,7 +489,8 @@ function render(ts) {
 }
 
 function drawGrid() {
-  ctx.strokeStyle = 'rgba(255,255,255,0.035)';
+  // Row lines – subtle
+  ctx.strokeStyle = 'rgba(255,255,255,0.055)';
   ctx.lineWidth   = 0.5;
   for (let r = 0; r <= ROWS; r++) {
     ctx.beginPath();
@@ -497,6 +498,9 @@ function drawGrid() {
     ctx.lineTo(canvas.width, r * CS);
     ctx.stroke();
   }
+  // Column lines – brighter so players can read the lanes
+  ctx.strokeStyle = 'rgba(255,255,255,0.13)';
+  ctx.lineWidth   = 0.75;
   for (let c = 0; c <= COLS; c++) {
     ctx.beginPath();
     ctx.moveTo(c * CS, 0);
